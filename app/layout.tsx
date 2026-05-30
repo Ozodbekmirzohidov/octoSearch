@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "Octo Search",
@@ -19,11 +20,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${roboto.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${roboto.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

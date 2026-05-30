@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+:root {
+  --background: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --head: #0f172a;
+  --p: #64748b;
+  --green: #16a34a;
+}
+
+.dark {
+  --background: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --head: #f1f5f9;
+  --p: #94a3b8;
+  --green: #16a34a;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-head: var(--head);
+  --color-p: var(--p);
+  --color-green: var(--green);
+}
+
 body {
-  background: #ffffff;
+  background: var(--background);
+  color: var(--p);
+  transition:
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
 }
