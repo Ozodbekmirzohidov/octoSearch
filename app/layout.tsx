@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
+import { Providers } from "../components";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -20,18 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${roboto.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${roboto.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <body className="min-h-full flex flex-col">
-        <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem={false}
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </SessionProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
