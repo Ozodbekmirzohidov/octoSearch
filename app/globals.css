@@ -7,6 +7,7 @@
   --head: #0f172a;
   --p: #64748b;
   --green: #16a34a;
+  --mini-card: #f1f5f9;
 }
 
 .dark {
@@ -16,15 +17,20 @@
   --head: #f1f5f9;
   --p: #94a3b8;
   --green: #16a34a;
+  --shadow-navbar: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --mini-card: #243044;
 }
 
 @theme {
+  --shadow-navbar: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  --shadow-input: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --color-background: var(--background);
   --color-card: var(--card);
   --color-border: var(--border);
   --color-head: var(--head);
   --color-p: var(--p);
   --color-green: var(--green);
+  --color-mini-card: var(--mini-card)
 }
 
 body {

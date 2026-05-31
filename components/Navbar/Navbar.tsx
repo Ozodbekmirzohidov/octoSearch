@@ -1,16 +1,32 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import { useSession, signOut } from "next-auth/react";
 
+const pageNames: Record<string, string> = {
+  "/home": "Home",
+  "/search": "Search",
+  "/results": "Search Results",
+  "/user": "Profile Card",
+  "/stats": "Statistics",
+  "/saved": "Saved Searches",
+};
+
 export function Navbar() {
   const { data: session } = useSession();
+  const pathname = usePathname();
 
+  const pageName =
+    Object.entries(pageNames).find(([key]) => pathname.startsWith(key))?.[1] ??
+    "OctoSearch";
+  
   return (
     <nav className="flex items-center justify-between w-full border-b border-border bg-card shadow-navbar py-3 px-4 md:px-6">
       <div className="flex items-center gap-2">
-        <h2 className="text-head font-medium text-lg">Profile overview</h2>
+        <h2 className="text-head font-medium text-lg">{pageName}</h2>
+        
       </div>
 
       <div className="flex-1 max-w-xs md:max-w-sm mx-4">

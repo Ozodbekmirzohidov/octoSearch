@@ -1,4 +1,5 @@
 import { User } from "@/lib/types";
+import Link from "next/link";
 import Image from "next/image";
 
 interface ProfileHeaderProps {
@@ -223,6 +224,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
                     />
                   </svg>
                 ),
+                href: `/${user.login}?tab=repositories`,
               },
               {
                 label: "Followers",
@@ -242,6 +244,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
                     />
                   </svg>
                 ),
+                href: `/stats/${user.login}`,
               },
               {
                 label: "Following",
@@ -261,11 +264,13 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
                     />
                   </svg>
                 ),
+                href: `/stats/${user.login}`,
               },
             ].map((stat) => (
-              <div
+              <Link
                 key={stat.label}
                 className="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-mini-card transition-colors"
+                href={stat.href}
               >
                 <div className="flex items-center gap-3 text-p">
                   {stat.icon}
@@ -274,7 +279,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
                 <span className="text-sm font-medium text-head">
                   {stat.value.toLocaleString()}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

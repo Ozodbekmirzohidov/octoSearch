@@ -27,7 +27,12 @@ export interface User {
   followers: number;
   following: number;
   location: string | null;
+  email: string | null;
+  blog: string | null;
+  company: string | null;
+  created_at: string | null;
 }
+
 
 export interface SearchResult {
   total_count: number;
