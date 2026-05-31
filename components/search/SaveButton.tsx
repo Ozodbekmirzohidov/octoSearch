@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { supabase } from "@/lib/supabase";
 
@@ -14,15 +14,41 @@ export default function SaveButton({ query, type }: SaveButtonProps) {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Sahifa ochilganda allaqachon saqlangan bo'lsa tekshir
+  useEffect(() => {
+    async function checkSaved() {
+      if (!session) return;
+      const { data } = await supabase
+        .from("saved_searches")
+        .select("id")
+        .eq("user_id", session?.user?.email ?? session?.user?.name ?? "")
+        .eq("query", query)
+        .eq("type", type)
+        .maybeSingle();
+      if (data) setSaved(true);
+    }
+    checkSaved();
+  }, [query, type, session]);
+
   if (!session) return null;
 
   async function handleSave() {
     setLoading(true);
-    await supabase.from("saved_searches").insert({
-      user_id: session?.user?.email ?? session?.user?.name ?? "",
-      query,
-      type,
-    });
+    const { data: existing } = await supabase
+      .from("saved_searches")
+      .select("id")
+      .eq("user_id", session?.user?.email ?? session?.user?.name ?? "")
+      .eq("query", query)
+      .eq("type", type)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from("saved_searches").insert({
+        user_id: session?.user?.email ?? session?.user?.name ?? "",
+        query,
+        type,
+      });
+    }
     setSaved(true);
     setLoading(false);
   }
