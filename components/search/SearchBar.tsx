@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { supabase } from "@/lib/supabase";
 
 const filterOptions = ["Repositories", "Users", "Code", "Issues"];
 
@@ -19,7 +21,7 @@ export default function SearchBar({
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
+  const { data: session } = useSession();
   // Keyboard shortcut — "/" tugmasi
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -35,13 +37,39 @@ export default function SearchBar({
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-    router.push(
-      `/results?q=${encodeURIComponent(query.trim())}&type=${filter.toLowerCase()}`,
-    );
-  };
+ const handleSearch = async (e: React.FormEvent) => {
+   e.preventDefault();
+   if (!query.trim()) return;
+
+   if (session) {
+     const userId = session.user?.email ?? session.user?.name ?? "";
+     const { data: existing } = await supabase
+       .from("search_history")
+       .select("id")
+       .eq("user_id", userId)
+       .eq("query", query.trim())
+       .eq("type", filter.toLowerCase())
+       .maybeSingle();
+
+     if (existing) {
+       await supabase
+         .from("search_history")
+         .update({ searched_at: new Date().toISOString() })
+         .eq("id", existing.id);
+     } else {
+       await supabase.from("search_history").insert({
+         user_id: userId,
+         query: query.trim(),
+         type: filter.toLowerCase(),
+         searched_at: new Date().toISOString(),
+       });
+     }
+   }
+
+   router.push(
+     `/results?q=${encodeURIComponent(query.trim())}&type=${filter.toLowerCase()}`,
+   );
+ };
 
   return (
     <div className="w-full">
