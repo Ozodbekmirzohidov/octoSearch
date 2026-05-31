@@ -14,7 +14,6 @@ export default function SaveButton({ query, type }: SaveButtonProps) {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Sahifa ochilganda allaqachon saqlangan bo'lsa tekshir
   useEffect(() => {
     async function checkSaved() {
       if (!session) return;
@@ -33,7 +32,10 @@ export default function SaveButton({ query, type }: SaveButtonProps) {
   if (!session) return null;
 
   async function handleSave() {
+    if (saved || loading) return;
     setLoading(true);
+    setSaved(true);
+
     const { data: existing } = await supabase
       .from("saved_searches")
       .select("id")
@@ -43,13 +45,18 @@ export default function SaveButton({ query, type }: SaveButtonProps) {
       .maybeSingle();
 
     if (!existing) {
-      await supabase.from("saved_searches").insert({
+      const { error } = await supabase.from("saved_searches").insert({
         user_id: session?.user?.email ?? session?.user?.name ?? "",
         query,
         type,
       });
+
+      if (error) {
+        setSaved(false);
+        console.error(error);
+      }
     }
-    setSaved(true);
+
     setLoading(false);
   }
 
