@@ -38,7 +38,6 @@ export function Navbar() {
     <nav className="flex items-center justify-between w-full border-b border-border bg-card shadow-navbar py-3 px-4 md:px-6">
       <div className="flex items-center gap-2">
         <h2 className="text-head font-medium text-lg">{pageName}</h2>
-        
       </div>
 
       <div className="flex-1 max-w-xs md:max-w-sm mx-4">
@@ -53,7 +52,7 @@ export function Navbar() {
           <input
             type="text"
             className="w-full bg-background text-head text-sm placeholder:text-p pl-9 pr-4 py-2 border border-border rounded-xl outline-none shadow-input focus:shadow-input-focus focus:border-green transition-all"
-            placeholder="Search GitHub users..."
+            placeholder="Search repositories..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleSearch}
