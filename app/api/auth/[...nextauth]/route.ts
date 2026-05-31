@@ -10,10 +10,16 @@ const handler = NextAuth({
   ],
   callbacks: {
     async session({ session, token }) {
-      if (session.user) {
-        session.user.name = token.sub!;
+      if (session.user && token) {
+        session.user.name = token.login as string;
       }
       return session;
+    },
+    async jwt({ token, profile }) {
+      if (profile) {
+        token.login = (profile as { login: string }).login;
+      }
+      return token;
     },
   },
 });
