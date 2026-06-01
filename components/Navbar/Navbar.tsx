@@ -1,6 +1,4 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -17,8 +15,6 @@ const pageNames: Record<string, string> = {
 };
 
 export function Navbar() {
-  const [query, setQuery] = useState("");
-  const router = useRouter();
   const { data: session } = useSession();
   const pathname = usePathname();
 
@@ -26,13 +22,6 @@ export function Navbar() {
     Object.entries(pageNames).find(([key]) => pathname.startsWith(key))?.[1] ??
     "OctoSearch";
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && query.trim()) {
-      router.push(
-        `/results?q=${encodeURIComponent(query.trim())}&type=repositories`,
-      );
-    }
-  };
   
   return (
     <nav className="flex items-center justify-between w-full border-b border-border bg-card shadow-navbar py-3 px-4 md:px-6">
@@ -41,23 +30,7 @@ export function Navbar() {
       </div>
 
       <div className="flex-1 max-w-xs md:max-w-sm mx-4">
-        <div className="relative flex items-center">
-          <Image
-            className="absolute left-3"
-            src="/assets/img/svg/search.svg"
-            alt="search"
-            width={16}
-            height={16}
-          />
-          <input
-            type="text"
-            className="w-full bg-background text-head text-sm placeholder:text-p pl-9 pr-4 py-2 border border-border rounded-xl outline-none shadow-input focus:shadow-input-focus focus:border-green transition-all"
-            placeholder="Search repositories..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleSearch}
-          />
-        </div>
+
       </div>
 
       <div>
