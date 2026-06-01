@@ -4,9 +4,10 @@ import UserProfileCards from "@/components/home/UserProfileCards";
 import OctoSearchCards from "@/components/home/OctoSearchCards";
 import LatestRepos from "@/components/home/LatestRepos";
 import Link from "next/link";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function HomePage() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   let user = null;
   let repos = [];
